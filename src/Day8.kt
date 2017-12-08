@@ -32,11 +32,11 @@ class Day8 {
         return instructionList
     }
 
-    fun printPart1Solution() {
-        println("[Part 1]")
+    fun printSolution() {
         val instructionList = readInput()
         println("instructions = " + instructionList)
         val registerMap = mutableMapOf<String, Int>()
+        var maxValueEver = 0
         instructionList.map {
             if (!registerMap.containsKey(it.register)) {
                 registerMap[it.register] = 0
@@ -48,10 +48,17 @@ class Day8 {
 
             if (checkCondition(registerMap, it)) {
                 performInstruction(registerMap, it)
+
+                val maxRegisterNow = registerMap.maxBy { it.value }
+                if (maxRegisterNow!!.value > maxValueEver) {
+                    maxValueEver = maxRegisterNow.value
+                }
             }
         }
 
-        println( "highest value register = ${registerMap.maxBy { it.value }}")
+        println("[Part 1] highest value register = ${registerMap.maxBy { it.value }}")
+
+        println("[Part 2] largest value ever = $maxValueEver")
     }
 
     private fun checkCondition(registerMap: Map<String, Int>, instruction :Instruction) : Boolean {
@@ -72,12 +79,8 @@ class Day8 {
             "dec" -> registerMap[instruction.register] = registerMap[instruction.register]!! - instruction.amount
         }
     }
-
-    fun printPart2Solution() {
-        println("[Part 2]")
-    }
 }
 
 fun main(args: Array<String>) {
-    Day8().printPart1Solution()
+    Day8().printSolution()
 }
