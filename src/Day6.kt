@@ -47,19 +47,22 @@ class Day6 {
         return newMemBank
     }
 
-    fun printPart1Solution() {
+    fun printSolution() {
         println("[Part 1]")
         val memBanksHistory = mutableListOf<List<Int>>()
+        val memBanksLoopHistory = mutableListOf<List<Int>>()
         var memBanks = readInput()
         memBanksHistory.add(memBanks)
-        println("mem banks = " + memBanks)
 
+        var loopCycle = 1
         var cycle = 1
         while (true) {
             val newMemBank = redistribute(memBanks)
 
             if (memBanksHistory.contains(newMemBank)) {
                 println ("cycles to see duplicate = $cycle")
+                memBanksLoopHistory.add(newMemBank)
+                memBanks = newMemBank
                 break
             }
 
@@ -67,14 +70,23 @@ class Day6 {
             memBanks = newMemBank
             cycle++
         }
-    }
 
-    fun printPart2Solution() {
         println("[Part 2]")
+        while (true) {
+            val newMemBank = redistribute(memBanks)
+
+            if (memBanksLoopHistory.contains(newMemBank)) {
+                println ("infinite loop cycle size = $loopCycle")
+                break
+            }
+
+            memBanksLoopHistory.add(newMemBank)
+            memBanks = newMemBank
+            loopCycle++
+        }
     }
 }
 
 fun main(args: Array<String>) {
-    Day6().printPart1Solution()
-    //Day6().printPart2Solution()
+    Day6().printSolution()
 }
